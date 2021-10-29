@@ -1,5 +1,6 @@
 package com.wkdwoo.book.springboot.web;
 
+import com.wkdwoo.book.springboot.config.auth.LoginUser;
 import com.wkdwoo.book.springboot.config.auth.dto.SessionUser;
 import com.wkdwoo.book.springboot.domain.posts.PostsRepository;
 import com.wkdwoo.book.springboot.service.posts.PostsService;
@@ -20,12 +21,11 @@ public class IndexController {
     private final HttpSession httpSession;
 
     @GetMapping("/")
-    public String index(Model model) { // Model: 서버 템플릿 엔진에서 사용할 수 있는 객체를 저장할 수 있다.
+    public String index(Model model, @LoginUser SessionUser user) { // Model: 서버 템플릿 엔진에서 사용할 수 있는 객체를 저장할 수 있다.
         // 여기서는 postsService.findAllDesc()를 가져온 결과를 posts로 index.mustache에 전달
 
         model.addAttribute("posts", postsService.findAllDesc());
-
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        
         if (user != null) {
             model.addAttribute("userName", user.getName());
         }
